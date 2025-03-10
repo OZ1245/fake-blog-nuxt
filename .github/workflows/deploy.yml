@@ -21,7 +21,7 @@ jobs:
           target: "/home/${{ secrets.USERNAME }}/fake-blog-nuxt"
           # strip_components: 1
           #          rm: true
-          overwrite: true
+          # overwrite: true
 
       - name: Executing remote command
         uses: appleboy/ssh-action@master
