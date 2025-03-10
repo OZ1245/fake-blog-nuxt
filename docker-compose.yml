@@ -1,0 +1,7 @@
+version: "3"
+services:
+  fake-blog-nuxt-app:
+    build:
+      context: .
+    ports:
+      - "5000:5000"
