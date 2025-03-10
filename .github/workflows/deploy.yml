@@ -21,13 +21,13 @@ jobs:
           target: "/home/${{ secrets.USERNAME }}/fake-blog-nuxt"
           # strip_components: 1
           #          rm: true
-          overwrite: true
+          # overwrite: true
 
-      - name: Executing remote command
+      - name: Rebuild docker
         uses: appleboy/ssh-action@master
         with:
           HOST: ${{ secrets.HOST }}
           USERNAME: ${{ secrets.USERNAME }}
           PORT: ${{ secrets.PORT }}
           KEY: ${{ secrets.SSHKEY }}
-          script: ls
+          script: docker compose -d up --build
