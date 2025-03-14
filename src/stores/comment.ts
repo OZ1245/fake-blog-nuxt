@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import type { Email } from '@/src/types/common';
 import type { IFilterPayload } from '~/src/types/common';
-import { id } from 'postcss-selector-parser';
 
 interface ICommentBase {
   postId: number;
@@ -35,7 +34,6 @@ interface IReturnData {
 }
 
 export const useCommentStore = defineStore('commentStore', () => {
-//   https://jsonplaceholder.typicode.com/comments
   const fetchComments = async <T>(): Promise<T> => {
     try {
       const { json } = await fetch('https://jsonplaceholder.typicode.com/comments');
