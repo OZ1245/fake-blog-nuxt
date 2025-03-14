@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import type { IFilterPayload } from '~/src/types/common';
 
 interface IPostBase {
   title: string;
@@ -21,11 +22,6 @@ interface IPatchPostPayload {
   userId?: number;
 }
 
-interface IFilterPosts {
-  key: string;
-  value: string;
-}
-
 interface IReturnData {
   fetchPosts: () => Promise<IPost>;
   fetchPost: (id: number) => Promise<IPost>;
@@ -33,7 +29,7 @@ interface IReturnData {
   updatePost: (payload: IUpdatePostPayload) => Promise<IPost>;
   patchPost: (payload: IPatchPostPayload) => Promise<IPost>;
   deletePost: (id: number) => Promise<void>;
-  filterPosts: (payload: IFilterPosts[]) => Promise<IPost[]>;
+  filterPosts: (payload: IFilterPayload[]) => Promise<IPost[]>;
 }
 
 export const usePostStore = defineStore('postStore', () => {
@@ -112,7 +108,7 @@ export const usePostStore = defineStore('postStore', () => {
     }
   }
 
-  const filterPosts = async <T>(payload: IFilterPosts[]): Promise<T> => {
+  const filterPosts = async <T>(payload: IFilterPayload[]): Promise<T> => {
     let filterString: string[] = [];
 
     payload.forEach(({ key, value}) => {
