@@ -137,6 +137,14 @@ export const usePostStore = defineStore('postStore', () => {
    * /users/1/todos
    * /users/1/posts
    */
+  const fetchPostComments = async <T>(id: number): Promise<T> => {
+    try {
+      const { json } = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}/comments`)
+      return json as T;
+    } catch (error) {
+      throw error;
+    }
+  }
 
   return <IReturnData>{
     fetchPosts,
@@ -145,6 +153,7 @@ export const usePostStore = defineStore('postStore', () => {
     updatePost,
     patchPost,
     deletePost,
-    filterPosts
+    filterPosts,
+    fetchPostComments
   }
 })
