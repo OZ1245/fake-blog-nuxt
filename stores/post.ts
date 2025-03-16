@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { IFilterPayload } from '~/src/types/common';
+import type { IFilterPayload } from '~/types/common';
 
 interface IPostBase {
   title: string;
@@ -123,20 +123,6 @@ export const usePostStore = defineStore('postStore', () => {
     }
   }
 
-  // TODO: nested content
-  /**
-   * fetch('https://jsonplaceholder.typicode.com/posts/1/comments')
-   *   .then((response) => response.json())
-   *   .then((json) => console.log(json));
-   *
-   *   The available nested routes are:
-   *
-   * /posts/1/comments
-   * /albums/1/photos
-   * /users/1/albums
-   * /users/1/todos
-   * /users/1/posts
-   */
   const fetchPostComments = async <T>(id: number): Promise<T> => {
     try {
       const { json } = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}/comments`)

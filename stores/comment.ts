@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
-import type { Email } from '@/src/types/common';
-import type { IFilterPayload } from '~/src/types/common';
+import type { Email } from '~/types/common';
+import type { IFilterPayload } from '~/types/common';
 
 interface ICommentBase {
   postId: number;

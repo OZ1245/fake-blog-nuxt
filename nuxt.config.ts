@@ -2,5 +2,12 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  modules: ['nuxt-quasar-ui']
+  modules: ['nuxt-quasar-ui', '@nuxtjs/i18n'],
+  i18n: {
+    locales: [
+      { code: 'en', language: 'en-US', file: 'en-US.json' },
+      { code: 'ru', language: 'ru-RU', file: 'ru-RU.json' },
+    ],
+    defaultLocale: 'ru'
+  }
 });

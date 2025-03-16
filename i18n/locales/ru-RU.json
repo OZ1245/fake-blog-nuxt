@@ -1,0 +1,12 @@
+{
+  "admin": {
+    "headerTitle": "Админ-панель",
+    "drawerMenu": {
+      "data": "Данные"
+    },
+    "data": {
+      "posts": "Посты",
+      "users": "Пользователи"
+    }
+  }
+}

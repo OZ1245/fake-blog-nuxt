@@ -1,0 +1,12 @@
+{
+  "admin": {
+    "headerTitle": "Admin panel",
+    "drawerMenu": {
+      "data": "Data"
+    },
+    "data": {
+      "posts": "Posts",
+      "users": "Users"
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
-import type { Email } from '@/src/types/common';
-import type { IFilterPayload } from '~/src/types/common';
+import type { Email } from '~/types/common';
+import type { IFilterPayload } from '~/types/common';
 
 interface ICoordinates {
   lat: string;
@@ -143,7 +143,7 @@ export const useUserStore = defineStore('userStore', () => {
     }
   }
 
-  const fetchUserPorts = async <T>(id: number): Promise<T> => {
+  const fetchUserPosts = async <T>(id: number): Promise<T> => {
     try {
       const { json } = await fetch(`https://jsonplaceholder.typicode.com/users/${id}/posts`)
       return json as T;
@@ -160,6 +160,6 @@ export const useUserStore = defineStore('userStore', () => {
     patchUser,
     deleteUser,
     filterUsers,
-    fetchUserPorts
+    fetchUserPosts
   }
 });
