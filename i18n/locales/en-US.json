@@ -5,8 +5,22 @@
       "data": "Data"
     },
     "data": {
-      "posts": "Posts",
-      "users": "Users"
+      "posts": {
+        "tableTitle": "Posts",
+        "tableColumn": {
+          "title": "Title",
+          "body": "Content",
+          "user": "User"
+        }
+      },
+      "users": "Users",
+      "tabs": {
+        "posts": "Posts",
+        "users": "Users"
+      }
     }
+  },
+  "error": {
+    "cantFetchPosts": "Error fetching a list of posts"
   }
 }

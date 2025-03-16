@@ -4,6 +4,7 @@
     inline-label
     align="left"
     class="bg-secondary"
+    style="position: sticky; top: 50px; z-index: 1;"
   >
     <q-tab
       v-for="(item, i) in tabs"
@@ -17,7 +18,9 @@
   
   <q-separator />
   
-  <nuxt-page/>
+  <q-page style="min-height: calc(100vh - 100px); max-height: calc(100vh - 100px)">
+    <nuxt-page/>
+  </q-page>
 </template>
 
 <script lang="ts" setup>
@@ -37,13 +40,13 @@ const tabs = <ITab[]>[
   {
     name: 'posts',
     icon: 'article',
-    label: t('admin.data.posts'),
+    label: t('admin.data.tabs.posts'),
     to: '/admin/data/posts',
   },
   {
     name: 'users',
     icon: 'person',
-    label: t('admin.data.users'),
+    label: t('admin.data.tabs.users'),
     to: '/admin/data/users',
   },
 ];

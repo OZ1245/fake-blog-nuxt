@@ -61,30 +61,30 @@ interface IReturnData {
 export const useUserStore = defineStore('userStore', () => {
   const fetchUsers = async <T>(): Promise<T> => {
     try {
-      const { json } = await fetch('https://jsonplaceholder.typicode.com/users');
-      return json as T;
+      const response = await fetch('https://jsonplaceholder.typicode.com/users');
+      return await response.json() as T
     } catch (error) {
       throw error;
     }
   }
   const fetchUser = async <T>(id: number): Promise<T> => {
     try {
-      const { json } = await fetch(`https://jsonplaceholder.typicode.com/user/${id}`);
-      return json as T;
+      const response = await fetch(`https://jsonplaceholder.typicode.com/user/${id}`);
+      return await response.json() as T
     } catch (error) {
       throw error;
     }
   }
   const createUser = async <T>(payload: ICreateUserPayload): Promise<T> => {
     try {
-      const { json } = await fetch(`https://jsonplaceholder.typicode.com/user`, {
+      const response = await fetch(`https://jsonplaceholder.typicode.com/user`, {
         method: 'POST',
         body: JSON.stringify(payload),
         headers: {
           'Content-Type': 'application/json',
         }
       });
-      return json as T;
+      return await response.json() as T
     } catch (error) {
       throw error;
     }
@@ -92,14 +92,14 @@ export const useUserStore = defineStore('userStore', () => {
   const updateUser = async <T>(payload: IUpdateUserPayload): Promise<T> => {
     const { id } = payload;
     try {
-      const { json } = await fetch(`https://jsonplaceholder.typicode.com/user/${id}`, {
+      const response = await fetch(`https://jsonplaceholder.typicode.com/user/${id}`, {
         method: 'PUT',
         body: JSON.stringify(payload),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
         }
       });
-      return json as T;
+      return await response.json() as T
     } catch (error) {
       throw error;
     }
@@ -107,14 +107,14 @@ export const useUserStore = defineStore('userStore', () => {
   const patchUser = async <T>(payload: IPatchUserPayload): Promise<T> => {
     const { id } = payload;
     try {
-      const { json } = await fetch(`https://jsonplaceholder.typicode.com/user/${id}`, {
+      const response = await fetch(`https://jsonplaceholder.typicode.com/user/${id}`, {
         method: 'PATCH',
         body: JSON.stringify(payload),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
         }
       });
-      return json as T;
+      return await response.json() as T
     } catch (error) {
       throw error;
     }
@@ -136,8 +136,8 @@ export const useUserStore = defineStore('userStore', () => {
     });
 
     try {
-      const { json } = await fetch(`https://jsonplaceholder.typicode.com/users?${filterString.join('&')}`);
-      return json as T;
+      const response = await fetch(`https://jsonplaceholder.typicode.com/users?${filterString.join('&')}`);
+      return await response.json() as T
     } catch (error) {
       throw error;
     }
@@ -145,8 +145,8 @@ export const useUserStore = defineStore('userStore', () => {
 
   const fetchUserPosts = async <T>(id: number): Promise<T> => {
     try {
-      const { json } = await fetch(`https://jsonplaceholder.typicode.com/users/${id}/posts`)
-      return json as T;
+      const response = await fetch(`https://jsonplaceholder.typicode.com/users/${id}/posts`)
+      return await response.json() as T
     } catch (error) {
       throw error;
     }

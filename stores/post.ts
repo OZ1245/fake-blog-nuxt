@@ -23,7 +23,7 @@ interface IPatchPostPayload {
 }
 
 interface IReturnData {
-  fetchPosts: () => Promise<IPost>;
+  fetchPosts: () => Promise<IPost[]>;
   fetchPost: (id: number) => Promise<IPost>;
   createPost: (payload: ICreatePostPayload) => Promise<IPost>;
   updatePost: (payload: IUpdatePostPayload) => Promise<IPost>;
@@ -35,8 +35,8 @@ interface IReturnData {
 export const usePostStore = defineStore('postStore', () => {
   const fetchPosts = async <T>(): Promise<T> => {
     try {
-      const { json } = await fetch('https://jsonplaceholder.typicode.com/posts');
-      return json as T;
+      const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+      return await response.json() as T;
     } catch (error) {
       throw error;
     }
@@ -44,8 +44,8 @@ export const usePostStore = defineStore('postStore', () => {
 
   const fetchPost = async <T>(id: number): Promise<T> => {
     try {
-      const { json } = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
-      return json as T;
+      const response = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
+      return await response.json() as T
     } catch (error) {
       throw error;
     }
@@ -53,14 +53,14 @@ export const usePostStore = defineStore('postStore', () => {
 
   const createPost = async <T>(payload: ICreatePostPayload): Promise<T> => {
     try {
-      const { json } = await fetch('https://jsonplaceholder.typicode.com/post', {
+      const response = await fetch('https://jsonplaceholder.typicode.com/post', {
         method: 'POST',
         body: JSON.stringify(payload),
         headers: {
           'Content-Type': 'application/json',
         }
       });
-      return json as T;
+      return await response.json() as T
     } catch (error) {
       throw error;
     }
@@ -69,14 +69,14 @@ export const usePostStore = defineStore('postStore', () => {
   const updatePost = async <T>(payload: IUpdatePostPayload): Promise<T> => {
     const { id } = payload;
     try {
-      const { json } = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
+      const response = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
         method: 'PUT',
         body: JSON.stringify(payload),
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
         },
       });
-      return json as T;
+      return await response.json() as T
     } catch (error) {
       throw error;
     }
@@ -85,14 +85,14 @@ export const usePostStore = defineStore('postStore', () => {
   const patchPost = async <T>(payload: IPatchPostPayload): Promise<T> => {
     const { id } = payload;
     try {
-      const { json } = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
+      const response = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
         method: 'PUT',
         body: JSON.stringify(payload),
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
         },
       });
-      return json as T;
+      return await response.json() as T
     } catch (error) {
       throw error;
     }
@@ -116,8 +116,8 @@ export const usePostStore = defineStore('postStore', () => {
     });
 
     try {
-      const { json } = await fetch(`https://jsonplaceholder.typicode.com/posts?${filterString.join('&')}`);
-      return json as T;
+      const response = await fetch(`https://jsonplaceholder.typicode.com/posts?${filterString.join('&')}`);
+      return await response.json() as T
     } catch (error) {
       throw error;
     }
@@ -125,8 +125,8 @@ export const usePostStore = defineStore('postStore', () => {
 
   const fetchPostComments = async <T>(id: number): Promise<T> => {
     try {
-      const { json } = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}/comments`)
-      return json as T;
+      const response = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}/comments`)
+      return await response.json() as T
     } catch (error) {
       throw error;
     }

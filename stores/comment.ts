@@ -36,30 +36,30 @@ interface IReturnData {
 export const useCommentStore = defineStore('commentStore', () => {
   const fetchComments = async <T>(): Promise<T> => {
     try {
-      const { json } = await fetch('https://jsonplaceholder.typicode.com/comments');
-      return json as T;
+      const response = await fetch('https://jsonplaceholder.typicode.com/comments');
+      return await response.json() as T
     } catch (error) {
       throw error;
     }
   }
   const fetchComment = async <T>(id: number): Promise<T> => {
     try {
-      const { json } = await fetch(`https://jsonplaceholder.typicode.com/comment/${id}`);
-      return json as T;
+      const response = await fetch(`https://jsonplaceholder.typicode.com/comment/${id}`);
+      return await response.json() as T
     } catch (error) {
       throw error;
     }
   }
   const createComment = async <T>(payload: ICreateCommentPayload): Promise<T> => {
     try {
-      const { json } = await fetch(`https://jsonplaceholder.typicode.com/comment`, {
+      const response = await fetch(`https://jsonplaceholder.typicode.com/comment`, {
         method: 'POST',
         body: JSON.stringify(payload),
         headers: {
           'Content-Type': 'application/json',
         }
       });
-      return json as T;
+      return await response.json() as T
     } catch (error) {
       throw error;
     }
@@ -67,14 +67,14 @@ export const useCommentStore = defineStore('commentStore', () => {
   const updateComment = async <T>(payload: IUpdateCommentPayload): Promise<T> => {
     const { id } = payload;
     try {
-      const { json } = await fetch(`https://jsonplaceholder.typicode.com/comment/${id}`, {
+      const response = await fetch(`https://jsonplaceholder.typicode.com/comment/${id}`, {
         method: 'PUT',
         body: JSON.stringify(payload),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
         }
       });
-      return json as T;
+      return await response.json() as T
     } catch (error) {
       throw error;
     }
@@ -82,14 +82,14 @@ export const useCommentStore = defineStore('commentStore', () => {
   const patchComment = async <T>(payload: IPatchCommentPayload): Promise<T> => {
     const { id } = payload;
     try {
-      const { json } = await fetch(`https://jsonplaceholder.typicode.com/comment/${id}`, {
+      const response = await fetch(`https://jsonplaceholder.typicode.com/comment/${id}`, {
         method: 'PATCH',
         body: JSON.stringify(payload),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
         }
       });
-      return json as T;
+      return await response.json() as T
     } catch (error) {
       throw error;
     }
@@ -111,8 +111,8 @@ export const useCommentStore = defineStore('commentStore', () => {
     });
 
     try {
-      const { json } = await fetch(`https://jsonplaceholder.typicode.com/comments?${filterString.join('&')}`);
-      return json as T;
+      const response = await fetch(`https://jsonplaceholder.typicode.com/comments?${filterString.join('&')}`);
+      return await response.json() as T
     } catch (error) {
       throw error;
     }
