@@ -1,6 +1,6 @@
 <template>
   <q-list padding class="drawer-menu">
-    <q-item v-for="(item, i) in items" :key="`drawer-menu-item-${i}`" clickable v-ripple to="admin/data">
+    <q-item v-for="(item, i) in items" :key="`drawer-menu-item-${i}`" clickable v-ripple @click="handleItemClick(item.to)">
       <q-item-section avatar>
         <q-icon :name="item.icon" />
       </q-item-section>
@@ -25,6 +25,9 @@ interface IProps {
   items: IItem[];
 }
 
+const router = useRouter();
 const props = defineProps<IProps>();
 const { items } = toRefs(props);
+
+const handleItemClick = (to: IItem['to']) => router.push(to);
 </script>
