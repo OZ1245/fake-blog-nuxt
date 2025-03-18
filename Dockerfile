@@ -16,8 +16,8 @@ RUN npm install
 
 COPY --link . .
 
-RUN #npm run build
-RUN npm run generate
+#RUN npm run build
+RUN npm run build --prerender
 
 # Run
 FROM base
