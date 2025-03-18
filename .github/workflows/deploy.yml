@@ -17,7 +17,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME }}
           PORT: ${{ secrets.PORT }}
           KEY: ${{ secrets.SSHKEY }}
-          script: sh /home/${{ secrets.USERNAME }}/fake-blog-nuxt/down.sh
+          script: cd /home/${{ secrets.USERNAME }}/fake-blog-nuxt; sh down.sh
 
       - name: Copy repository contents via scp
         uses: appleboy/scp-action@master
@@ -39,4 +39,4 @@ jobs:
           USERNAME: ${{ secrets.USERNAME }}
           PORT: ${{ secrets.PORT }}
           KEY: ${{ secrets.SSHKEY }}
-          script: sh /home/${{ secrets.USERNAME }}/fake-blog-nuxt/up.sh
+          script: cd /home/${{ secrets.USERNAME }}/fake-blog-nuxt; sh up.sh
