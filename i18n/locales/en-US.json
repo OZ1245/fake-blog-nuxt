@@ -13,7 +13,18 @@
           "user": "User"
         }
       },
-      "users": "Users",
+      "users": {
+        "tableTitle": "Users",
+        "tableColumn": {
+          "name": "Name",
+          "company": "Company",
+          "website": "Website",
+          "phone": "Phone",
+          "address": "Address",
+          "email": "E-mail",
+          "username": "Username"
+        }
+      },
       "tabs": {
         "posts": "Posts",
         "users": "Users"
@@ -21,6 +32,7 @@
     }
   },
   "error": {
-    "cantFetchPosts": "Error fetching a list of posts"
+    "cantFetchPosts": "Error fetching a list of posts",
+    "cantFetchUsers": "Error fetch a user list"
   }
 }

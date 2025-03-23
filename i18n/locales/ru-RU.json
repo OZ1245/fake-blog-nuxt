@@ -13,7 +13,18 @@
           "user": "Пользователь"
         }
       },
-      "users": "Пользователи",
+      "users": {
+        "tableTitle": "Пользователи",
+        "tableColumn": {
+          "name": "Имя",
+          "company": "Организация",
+          "website": "Сайт",
+          "phone": "Телефон",
+          "address": "Адрес",
+          "email": "Email",
+          "username": "Логин"
+        }
+      },
       "tabs": {
         "posts": "Посты",
         "users": "Пользователи"
@@ -21,6 +32,7 @@
     }
   },
   "error": {
-    "cantFetchPosts": "Ошибка получения списка постов"
+    "cantFetchPosts": "Ошибка получения списка постов",
+    "cantFetchUsers": "Ошибка получения списка пользователей"
   }
 }

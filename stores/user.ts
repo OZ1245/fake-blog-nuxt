@@ -49,7 +49,7 @@ interface IPatchUserPayload {
 }
 
 interface IReturnData {
-  fetchUsers: () => Promise<IUser>;
+  fetchUsers: () => Promise<IUser[]>;
   fetchUser: (id: number) => Promise<IUser>;
   createUser: (payload: ICreateUserPayload) => Promise<IUser>;
   updateUser: (payload: IUpdateUserPayload) => Promise<IUser>;

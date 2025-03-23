@@ -24,8 +24,7 @@
     
     <q-page-container>
       <q-page>
-      
-      <nuxt-page/>
+        <nuxt-page/>
       </q-page>
     </q-page-container>
   

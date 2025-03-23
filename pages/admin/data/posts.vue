@@ -26,12 +26,10 @@ const tableColumns = <IAdminEditableListProps['columns']>[
 ];
 
 const getPosts = async () => {
-  console.log('=== getPosts ===');
   isLoading.value = true;
   
   try {
     const response = await fetchPosts();
-    console.log('response:', response);
     posts.value = response.map((post) => ({
       ...post,
       title: truncateText(post.title, 60),

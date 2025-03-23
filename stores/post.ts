@@ -34,12 +34,9 @@ interface IReturnData {
 
 export const usePostStore = defineStore('postStore', () => {
   const fetchPosts = async <T>(): Promise<T> => {
-    console.log('=== fetchPosts ===');
     try {
       const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-      const data = await response.json();
-      console.log('data: ', data);
-      return data as T;
+      return await response.json() as T;
     } catch (error) {
       throw error;
     }
