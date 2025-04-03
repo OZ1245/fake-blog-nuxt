@@ -4,6 +4,8 @@
     :columns="tableColumns"
     :data="posts"
     :loading="isLoading"
+    @open="handleOpenPost"
+    @delete="handleDeletePost"
   />
 </template>
 
@@ -48,6 +50,16 @@ const getPosts = async () => {
 
 const init = () => {
   getPosts();
+}
+
+const handleOpenPost = (data) => {
+  console.log('=== handleOpenPost ===');
+  console.log('data', data);
+}
+
+const handleDeletePost = (data) => {
+  console.log('=== handleDeletePost ===');
+  console.log('data', data);
 }
 
 init();

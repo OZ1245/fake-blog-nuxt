@@ -35,5 +35,10 @@
     "cantFetchPosts": "Error fetching a list of posts",
     "cantFetchUsers": "Error fetch a user list",
     "cantFetchUser": "Error fetch a user (id: {0})"
+  },
+  "common": {
+    "open": "Open",
+    "delete": "Delete",
+    "edit": "Edit"
   }
 }
