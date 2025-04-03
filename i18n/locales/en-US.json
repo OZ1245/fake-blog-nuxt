@@ -29,7 +29,9 @@
         "posts": "Posts",
         "users": "Users"
       }
-    }
+    },
+    "editModalFormHeader": "Edit \"{0}\"",
+    "openModalFormHeader": "Open \"{0}\""
   },
   "error": {
     "cantFetchPosts": "Error fetching a list of posts",

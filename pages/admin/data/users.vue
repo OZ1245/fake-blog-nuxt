@@ -4,15 +4,27 @@
     :columns="tableColumns"
     :data="users"
     :loading="isLoading"
+    @open="handleOpenPost"
+    @delete="handleDeletePost"
+  />
+  
+<!--  TODO: If read only -->
+  <admin-modal-form
+    v-model="form"
+    :fields="fields"
+    :is-visible="isVisibleModalForm"
+    :header-title="modalFormHeader"
+    @close="handleCloseModalForm"
   />
 </template>
 
 <script lang="ts" setup>
 import { useUserStore } from '~/stores/user';
-import type { ReturnType } from 'birpc';
-import type { IProps as IAdminEditableListProps } from '~/components/admin/editableList.vue';
+import type { IUser } from '~/stores/user';
+import type { IContextItem, IProps as IAdminEditableListProps } from '~/components/admin/editableList.vue';
+import type { IField, ModelValue } from '~/components/admin/modalForm.vue';
 
-interface IUser extends Awaited<ReturnType<typeof fetchUsers>> {
+interface IComputedUser extends Omit<IUser, 'company' | 'address'> {
   company: string;
   address: string;
 }
@@ -21,7 +33,17 @@ const { t } = useI18n();
 const { fetchUsers } = useUserStore();
 
 const isLoading = ref(true);
-const users = ref<IUser[]>([]);
+const users = ref<IComputedUser[]>([]);
+const isVisibleModalForm = ref<boolean>(false);
+const isReadonlyModalForm = ref<boolean>(false);
+const form = reactive<ModelValue>({
+  name: '',
+  username: '',
+  email: '',
+  phone: '',
+  website: '',
+});
+
 const tableTitle = t('admin.data.users.tableTitle');
 const tableColumns = <IAdminEditableListProps['columns']>[
   { name: "id", label: "ID", field: "id", align: "left" },
@@ -33,6 +55,34 @@ const tableColumns = <IAdminEditableListProps['columns']>[
   { name: "website", label: t('admin.data.users.tableColumn.website'), field: "website" },
   { name: "company", label: t('admin.data.users.tableColumn.company'), field: "company" },
 ];
+const fields = ref<IField[]>([
+  {
+    key: 'username',
+    label: t('admin.data.users.tableColumn.username'),
+    readonly: true
+  },
+  {
+    key: 'name',
+    label: t('admin.data.users.tableColumn.name')
+  },
+  {
+    key: 'email',
+    label: t('admin.data.users.tableColumn.email')
+  },
+  {
+    key: 'phone',
+    label: t('admin.data.users.tableColumn.phone')
+  },
+  {
+    key: 'website',
+    label: t('admin.data.users.tableColumn.website')
+  },
+]);
+
+const modalFormHeader = computed<string>(() => isReadonlyModalForm.value
+  ? t('admin.openModalFormHeader', [form.username])
+  : t('admin.editModalFormHeader', [form.username])
+);
 
 const getUsers = async () => {
   isLoading.value = true;
@@ -47,7 +97,7 @@ const getUsers = async () => {
         ${user.address.suite}
       `;
       
-      return <IUser>{
+      return <IComputedUser>{
         ...user,
         company,
         address
@@ -65,6 +115,26 @@ const getUsers = async () => {
 
 const init = () => {
   getUsers();
+}
+
+const handleOpenPost = ({ item }: IContextItem) => {
+  console.log('=== handleOpenPost ===');
+  console.log('item', item);
+  
+  Object.keys(item).forEach((key) => {
+    form[key] = item[key];
+  });
+  
+  isVisibleModalForm.value = true;
+}
+
+const handleDeletePost = (data) => {
+  console.log('=== handleDeletePost ===');
+  console.log('data', data);
+}
+
+const handleCloseModalForm = () => {
+  isVisibleModalForm.value = false;
 }
 
 init();

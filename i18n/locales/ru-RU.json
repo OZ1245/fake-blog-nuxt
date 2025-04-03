@@ -29,7 +29,9 @@
         "posts": "Посты",
         "users": "Пользователи"
       }
-    }
+    },
+    "editModalFormHeader": "Редактирование \"{0}\"",
+    "openModalFormHeader": "Открытие \"{0}\""
   },
   "error": {
     "cantFetchPosts": "Ошибка получения списка постов",

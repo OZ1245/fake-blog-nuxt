@@ -45,7 +45,7 @@ export interface IProps {
   allowDelete?: boolean;
 }
 
-interface IContextItem {
+export interface IContextItem {
   item: any;
   index: number | null;
 }
@@ -92,11 +92,14 @@ const handleCallContextmenuRow: QTableProps['onRowContextmenu'] = (_, row, index
 
 const handleOpen = () => {
   emits('open', contextItem);
-  clearContextItem();
+  
+  // nextTick(() => {
+  //   clearContextItem();
+  // });
 }
 
 const handleDelete = () => {
   emits('delete', contextItem);
-  clearContextItem();
+  // clearContextItem();
 }
 </script>
