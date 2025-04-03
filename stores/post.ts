@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia';
+import { useUserStore } from '~/stores/user';
 import type { IFilterPayload } from '~/types/common';
+import type { IUser } from '~/stores/user';
 
 interface IPostBase {
   title: string;
@@ -22,7 +24,12 @@ interface IPatchPostPayload {
   userId?: number;
 }
 
+interface IComputedPost extends IPost {
+  user: IUser;
+}
+
 interface IReturnData {
+  // Based actions
   fetchPosts: () => Promise<IPost[]>;
   fetchPost: (id: number) => Promise<IPost>;
   createPost: (payload: ICreatePostPayload) => Promise<IPost>;
@@ -30,9 +37,14 @@ interface IReturnData {
   patchPost: (payload: IPatchPostPayload) => Promise<IPost>;
   deletePost: (id: number) => Promise<void>;
   filterPosts: (payload: IFilterPayload[]) => Promise<IPost[]>;
+
+  // Custom actions
+  fetchComputedPosts: () => Promise<IComputedPost[]>;
 }
 
 export const usePostStore = defineStore('postStore', () => {
+  const { fetchUsers } = useUserStore();
+
   const fetchPosts = async <T>(): Promise<T> => {
     try {
       const response = await fetch('https://jsonplaceholder.typicode.com/posts');
@@ -41,6 +53,26 @@ export const usePostStore = defineStore('postStore', () => {
       throw error;
     }
   }
+
+  const fetchComputedPosts = async <T>(): Promise<T> => {
+    try {
+      const users = await fetchUsers();
+      const posts: IPost[] = await fetchPosts();
+
+      if (!posts.length) return [] as T;
+
+      return posts.map((post) => {
+        const user: IUser | null = users.find((user) => user.id === post.userId) || null;
+
+        return {
+          ...post,
+          user
+        };
+      }) as T;
+    } catch (error) {
+      throw error;
+    }
+  };
 
   const fetchPost = async <T>(id: number): Promise<T> => {
     try {
@@ -140,6 +172,8 @@ export const usePostStore = defineStore('postStore', () => {
     patchPost,
     deletePost,
     filterPosts,
-    fetchPostComments
+    fetchPostComments,
+
+    fetchComputedPosts
   }
 })

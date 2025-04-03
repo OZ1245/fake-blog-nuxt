@@ -33,6 +33,7 @@
   },
   "error": {
     "cantFetchPosts": "Error fetching a list of posts",
-    "cantFetchUsers": "Error fetch a user list"
+    "cantFetchUsers": "Error fetch a user list",
+    "cantFetchUser": "Error fetch a user (id: {0})"
   }
 }

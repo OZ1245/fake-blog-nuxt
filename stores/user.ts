@@ -31,7 +31,7 @@ interface IUserBase {
   company: ICompany;
 }
 
-interface IUser extends IUserBase {
+export interface IUser extends IUserBase {
   id: number;
 }
 
@@ -59,17 +59,19 @@ interface IReturnData {
 }
 
 export const useUserStore = defineStore('userStore', () => {
+  const users = ref<IUser[]>([]);
+
   const fetchUsers = async <T>(): Promise<T> => {
     try {
       const response = await fetch('https://jsonplaceholder.typicode.com/users');
-      return await response.json() as T
+      return await response.json() as T;
     } catch (error) {
       throw error;
     }
   }
   const fetchUser = async <T>(id: number): Promise<T> => {
     try {
-      const response = await fetch(`https://jsonplaceholder.typicode.com/user/${id}`);
+      const response = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
       return await response.json() as T
     } catch (error) {
       throw error;
@@ -160,6 +162,6 @@ export const useUserStore = defineStore('userStore', () => {
     patchUser,
     deleteUser,
     filterUsers,
-    fetchUserPosts
+    fetchUserPosts,
   }
 });

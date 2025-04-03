@@ -41,13 +41,13 @@ const tabs = <ITab[]>[
     name: 'posts',
     icon: 'article',
     label: t('admin.data.tabs.posts'),
-    to: 'posts',
+    to: 'data/posts',
   },
   {
     name: 'users',
     icon: 'person',
     label: t('admin.data.tabs.users'),
-    to: 'users',
+    to: 'data/users',
   },
 ];
 const tab = ref<string>('posts');

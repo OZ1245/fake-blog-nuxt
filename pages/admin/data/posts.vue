@@ -13,27 +13,28 @@ import type { ReturnType } from 'birpc';
 import type { IProps as IAdminEditableListProps } from '~/components/admin/editableList.vue';
 
 const { t } = useI18n();
-const { fetchPosts } = usePostStore();
+const { fetchComputedPosts } = usePostStore();
 
 const isLoading = ref(true);
-const posts = ref<Awaited<ReturnType<typeof fetchPosts>>>([]);
+const posts = ref<Awaited<ReturnType<typeof fetchComputedPosts>>>([]);
 const tableTitle = t('admin.data.posts.tableTitle');
 const tableColumns = <IAdminEditableListProps['columns']>[
   { name: "id", label: "ID", field: "id", align: "left" },
   { name: "title", label: t('admin.data.posts.tableColumn.title'), field: "title" },
   { name: "body", label: t('admin.data.posts.tableColumn.body'), field: "body" },
-  { name: "userId", label: t('admin.data.posts.tableColumn.user'), field: "userId" },
+  { name: "user", label: t('admin.data.posts.tableColumn.user'), field: "authorName" },
 ];
 
 const getPosts = async () => {
   isLoading.value = true;
   
   try {
-    const response = await fetchPosts();
+    const response = await fetchComputedPosts();
     posts.value = response.map((post) => ({
       ...post,
       title: truncateText(post.title, 60),
-      body: truncateText(post.body, 60)
+      body: truncateText(post.body, 60),
+      authorName: post.user.name
     }));
   } catch (error) {
     Notify.create({
