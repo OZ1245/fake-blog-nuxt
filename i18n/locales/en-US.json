@@ -34,13 +34,17 @@
     "openModalFormHeader": "Open \"{0}\""
   },
   "error": {
-    "cantFetchPosts": "Error fetching a list of posts",
-    "cantFetchUsers": "Error fetch a user list",
-    "cantFetchUser": "Error fetch a user (id: {0})"
+    "cantFetchPosts": "Error fetching a list of posts: {0}",
+    "cantFetchUsers": "Error fetch a user list: {0}",
+    "cantFetchUser": "Error fetch a user (id: {0}): {0}"
   },
   "common": {
     "open": "Open",
     "delete": "Delete",
-    "edit": "Edit"
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "cancelTitle": "Cancel edit",
+    "cancelMessage": "Are you sure you want to leave? All disguised data will be deleted."
   }
 }

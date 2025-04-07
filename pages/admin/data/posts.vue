@@ -41,7 +41,7 @@ const getPosts = async () => {
   } catch (error) {
     Notify.create({
       type: 'error',
-      message: `${t('error.cantFetchPosts')}: ${error}`,
+      message: t('error.cantFetchPosts', [error]),
     });
   } finally {
     isLoading.value = false;

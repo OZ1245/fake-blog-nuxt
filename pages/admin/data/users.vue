@@ -4,17 +4,10 @@
     :columns="tableColumns"
     :data="users"
     :loading="isLoading"
-    @open="handleOpenPost"
-    @delete="handleDeletePost"
-  />
-  
-<!--  TODO: If read only -->
-  <admin-modal-form
-    v-model="form"
     :fields="fields"
-    :is-visible="isVisibleModalForm"
-    :header-title="modalFormHeader"
-    @close="handleCloseModalForm"
+    @open="handleOpenUser"
+    @delete="handleDeleteUser"
+    @save="handleSaveUser"
   />
 </template>
 
@@ -24,25 +17,19 @@ import type { IUser } from '~/stores/user';
 import type { IContextItem, IProps as IAdminEditableListProps } from '~/components/admin/editableList.vue';
 import type { IField, ModelValue } from '~/components/admin/modalForm.vue';
 
+// TYPE DECLARE
+
 interface IComputedUser extends Omit<IUser, 'company' | 'address'> {
   company: string;
   address: string;
 }
 
+// COMPOSABLES
+
 const { t } = useI18n();
 const { fetchUsers } = useUserStore();
 
-const isLoading = ref(true);
-const users = ref<IComputedUser[]>([]);
-const isVisibleModalForm = ref<boolean>(false);
-const isReadonlyModalForm = ref<boolean>(false);
-const form = reactive<ModelValue>({
-  name: '',
-  username: '',
-  email: '',
-  phone: '',
-  website: '',
-});
+// DATA
 
 const tableTitle = t('admin.data.users.tableTitle');
 const tableColumns = <IAdminEditableListProps['columns']>[
@@ -55,6 +42,11 @@ const tableColumns = <IAdminEditableListProps['columns']>[
   { name: "website", label: t('admin.data.users.tableColumn.website'), field: "website" },
   { name: "company", label: t('admin.data.users.tableColumn.company'), field: "company" },
 ];
+
+// REACTIVE DATA
+
+const isLoading = ref(true);
+const users = ref<IComputedUser[]>([]);
 const fields = ref<IField[]>([
   {
     key: 'username',
@@ -79,10 +71,7 @@ const fields = ref<IField[]>([
   },
 ]);
 
-const modalFormHeader = computed<string>(() => isReadonlyModalForm.value
-  ? t('admin.openModalFormHeader', [form.username])
-  : t('admin.editModalFormHeader', [form.username])
-);
+// METHODS
 
 const getUsers = async () => {
   isLoading.value = true;
@@ -106,7 +95,7 @@ const getUsers = async () => {
   } catch (error) {
     Notify.create({
       type: 'error',
-      message: `${t('error.cantFetchPosts')}: ${error}`,
+      message: t('error.cantFetchPosts', [error]),
     });
   } finally {
     isLoading.value = false;
@@ -117,25 +106,24 @@ const init = () => {
   getUsers();
 }
 
-const handleOpenPost = ({ item }: IContextItem) => {
-  console.log('=== handleOpenPost ===');
+// HANDLERS
+
+const handleOpenUser = ({ item }: IContextItem) => {
+  console.log('=== handleOpenUser ===');
   console.log('item', item);
-  
-  Object.keys(item).forEach((key) => {
-    form[key] = item[key];
-  });
-  
-  isVisibleModalForm.value = true;
 }
 
-const handleDeletePost = (data) => {
-  console.log('=== handleDeletePost ===');
+const handleDeleteUser = (data) => {
+  console.log('=== handleDeleteUser ===');
   console.log('data', data);
 }
 
-const handleCloseModalForm = () => {
-  isVisibleModalForm.value = false;
+const handleSaveUser = (form: ModelValue) => {
+  console.log('=== handleSaveUser ===');
+  console.log('form', form);
 }
+
+// LIFECYCLE HOOKS
 
 init();
 </script>
