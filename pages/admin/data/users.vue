@@ -14,7 +14,7 @@
 <script lang="ts" setup>
 import { useUserStore } from '~/stores/user';
 import type { IUser } from '~/stores/user';
-import type { IContextItem, IProps as IAdminEditableListProps } from '~/components/admin/editableList.vue';
+import type { ICurrentRow, IProps as IAdminEditableListProps } from '~/components/admin/editableList.vue';
 import type { IField, ModelValue } from '~/components/admin/modalForm.vue';
 
 // TYPE DECLARE

@@ -12,7 +12,7 @@
       :name="item.name"
       :icon="item.icon"
       :label="item.label"
-      @click="handleItemClick(item.to)"
+      @click="handleItemClick(item)"
     />
   </q-tabs>
   
@@ -26,7 +26,7 @@
 <script lang="ts" setup>
 import type { RouteLocationRaw } from '#vue-router';
 
-interface  ITab {
+interface ITab {
   name: string;
   icon: string;
   label: string;
@@ -35,6 +35,7 @@ interface  ITab {
 
 const { t } = useI18n();
 const router = useRouter();
+const route = useRoute();
 
 const tabs = <ITab[]>[
   {
@@ -52,5 +53,13 @@ const tabs = <ITab[]>[
 ];
 const tab = ref<string>('posts');
 
-const handleItemClick = (to: ITab['to']) => router.push(to);
+const handleItemClick = (tabItem: ITab) => {
+  tab.value = tabItem.name;
+  router.push(tabItem.to);
+};
+
+onMounted(() => {
+  const pages = route.path.split('/');
+  tab.value = pages[pages.length - 1];
+});
 </script>
