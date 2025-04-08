@@ -5,10 +5,10 @@
         @submit="handleSubmit"
         @reset="handleReset"
       >
-        <q-card-section class="row items-center q-pb-none">
+        <q-card-section class="row items-center">
           <div class="text-h6">{{ headerTitle }}</div>
-          <q-space />
-          <q-btn icon="close" flat round dense v-close-popup @click="handleClose" />
+<!--          <q-space />-->
+<!--          <q-btn icon="close" flat round dense v-close-popup @click="handleClose" />-->
         </q-card-section>
         
         <q-separator />
@@ -110,12 +110,6 @@ const isVisibleDialog = computed({
   },
   set(value) {
     emits('toggle', value);
-    
-    if (value) {
-      emits('open', value);
-    } else {
-      emits('close', value);
-    }
   }
 });
 
@@ -141,6 +135,7 @@ const handleReset = () => {
 
 const handleClose = () => {
   isVisibleDialog.value = false;
+  emits('close', false);
 }
 
 const handleCancel = () => {
@@ -156,6 +151,7 @@ const handleCancel = () => {
   })
   .onOk(() => {
     isVisibleDialog.value = false;
+    emits('close', false);
   })
   .onCancel(() => {
     return;

@@ -8,6 +8,7 @@
     flat
     virtual-scroll
     class="my-sticky-header-table"
+    @row-dblclick="handleDbClickRow"
     @row-contextmenu.prevent="handleCallContextmenuRow"
   >
     <template v-slot:body-cell="props">
@@ -18,7 +19,6 @@
         touch-position
         context-menu
       >
-<!--        TODO: -->
         <q-list dense style="min-width: 100px">
           <q-item v-if="allowOpen" clickable v-close-popup @click="handleOpenModalForm">
             <q-item-section>{{ openContextMenuItemText }}</q-item-section>
@@ -61,35 +61,39 @@ export interface IProps {
   fields?: IField[];
 }
 
-export interface IContextItem {
+export interface ICurrentRow {
   item: any;
-  index: number | null;
+  index: number;
 }
 
-// COMPOSIBLE
+// COMPOSABLES
 
 const { t } = useI18n();
+const router = useRouter();
+const route = useRoute();
 
 // PROPS
 
+// const props = defineProps<IProps>();
 const {
   title,
   columns,
   data,
-  loading,
+  loading = true,
   isReadonly = false,
   allowOpen = true,
   allowDelete = true,
   fields = [],
 } = defineProps<IProps>();
+// } = toRefs(props);
 
 // EMITS
 
 const emits = defineEmits<{
-  (e: 'open', value: IContextItem): void;
-  (e: 'delete', value: IContextItem): void;
+  (e: 'open', value: ICurrentRow): void;
+  (e: 'delete', value: ICurrentRow): void;
   (e: 'save', value: ModelValue): void;
-  (e: 'resetToDefault', value: IContextItem): void;
+  (e: 'resetToDefault', value: ICurrentRow): void;
 }>();
 
 // DATA
@@ -101,9 +105,9 @@ const pagination = {
 // REACTIVE DATA
 
 const isVisibleModalForm = ref<boolean>(false);
-const contextItem = reactive<IContextItem>({
+const currentRow = reactive<ICurrentRow>({
   item: null,
-  index: null,
+  index: 0,
 });
 const form = reactive<ModelValue>({});
 
@@ -119,33 +123,74 @@ const modalFormHeader = computed<string>(() => isReadonly
 // METHODS
 
 const clearContextItem = () => {
-  contextItem.item = null;
-  contextItem.index = null;
+  currentRow.item = null;
+  currentRow.index = 0;
 }
 
-const handleCallContextmenuRow: QTableProps['onRowContextmenu'] = (_, row, index) => {
-  contextItem.item = row;
-  contextItem.index = index;
-}
-
-// HANDLERS
-
-const handleOpenModalForm = () => {
-  emits('open', contextItem);
-  
-  Object.keys(contextItem.item).forEach((key) => {
-    form[key] = contextItem.item[key];
+const routeModalForm = () => {
+  router.push({
+    query: {
+      modal: encodeURI(JSON.stringify({
+        index: currentRow.index
+      })),
+    }
   });
+}
+
+const openModalForm = () => {
+  if (route.query.modal) {
+    const { index } = JSON.parse(decodeURI(route.query.modal as string));
+    
+    currentRow.index = index;
+    currentRow.item = data[index];
+    
+    processModalForm();
+    
+    isVisibleModalForm.value = true;
+  }
+}
+
+const processModalForm = () => {
+  if (!currentRow.item) return;
   
-  isVisibleModalForm.value = true;
+  Object.keys(currentRow.item).forEach((key) => {
+    form[key] = currentRow.item[key];
+  });
   
   // nextTick(() => {
   //   clearContextItem();
   // });
 }
 
+// HANDLERS
+
+const handleCallContextmenuRow: QTableProps['onRowContextmenu'] = (_, row, index) => {
+  currentRow.item = row;
+  currentRow.index = index;
+}
+
+const handleDbClickRow: QTableProps['onRowDblclick'] = (_, row, index) => {
+  currentRow.item = row;
+  currentRow.index = index;
+  
+  // processModalForm();
+  nextTick(() => {
+    routeModalForm();
+  })
+}
+
+const handleOpenModalForm = () => {
+  emits('open', currentRow);
+  
+  routeModalForm();
+}
+
 const handleCloseModalForm = () => {
   isVisibleModalForm.value = false;
+  
+  router.push({
+    query: undefined
+  });
 }
 
 const handleSubmitModalForm = (form: ModelValue) => {
@@ -153,7 +198,29 @@ const handleSubmitModalForm = (form: ModelValue) => {
 }
 
 const handleDelete = () => {
-  emits('delete', contextItem);
+  emits('delete', currentRow);
   // clearContextItem();
 }
+
+// WATCHERS
+
+watch(
+  () => loading,
+  (val) => {
+    if (val) return;
+    openModalForm();
+  }
+)
+
+watch(
+  () => route.query,
+  () => {
+    openModalForm();
+  },
+  {
+    deep: true,
+  }
+);
+
+// LIFECYCLE HOOKS
 </script>
