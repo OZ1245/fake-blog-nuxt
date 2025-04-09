@@ -135,7 +135,7 @@ const close = () => {
   emits('close', false);
 }
 
-const init = () => {
+const copyInitialModelValue = () => {
   initForm.value = { ...model.value };
 }
 
@@ -184,8 +184,7 @@ const handleCancel = () => {
 // LIFECYCLE HOOKS
 
 onMounted(() => {
-
-init();
+  copyInitialModelValue();
 })
 </script>
 
