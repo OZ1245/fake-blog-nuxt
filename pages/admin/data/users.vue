@@ -27,7 +27,7 @@ interface IComputedUser extends Omit<IUser, 'company' | 'address'> {
 // COMPOSABLES
 
 const { t } = useI18n();
-const { fetchUsers } = useUserStore();
+const { fetchUsers, updateUser } = useUserStore();
 
 // DATA
 
@@ -118,9 +118,10 @@ const handleDeleteUser = (data) => {
   console.log('data', data);
 }
 
-const handleSaveUser = (form: ModelValue) => {
+const handleSaveUser = async (form: ModelValue) => {
   console.log('=== handleSaveUser ===');
   console.log('form', form);
+  await updateUser(form as IUser);
 }
 
 // LIFECYCLE HOOKS
