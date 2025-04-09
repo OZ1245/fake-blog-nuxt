@@ -65,6 +65,11 @@ export interface ICurrentRow {
   index: number;
 }
 
+export interface IModalForm {
+  form: ModelValue;
+  item: ICurrentRow;
+}
+
 // COMPOSABLES
 
 const { t } = useI18n();
@@ -91,7 +96,7 @@ const {
 const emits = defineEmits<{
   (e: 'open', value: ICurrentRow): void;
   (e: 'delete', value: ICurrentRow): void;
-  (e: 'save', value: ModelValue): void;
+  (e: 'save', value: IModalForm): void;
   (e: 'resetToDefault', value: ICurrentRow): void;
 }>();
 
@@ -152,13 +157,21 @@ const openModalForm = () => {
 const processModalForm = () => {
   if (!currentRow.item) return;
   
-  Object.keys(currentRow.item).forEach((key) => {
+  fields.forEach(({ key }) => {
     form[key] = currentRow.item[key];
   });
   
   // nextTick(() => {
   //   clearContextItem();
   // });
+}
+
+const closeModalForm = () => {
+  isVisibleModalForm.value = false;
+  
+  router.push({
+    query: undefined
+  });
 }
 
 // HANDLERS
@@ -185,15 +198,14 @@ const handleOpenModalForm = () => {
 }
 
 const handleCloseModalForm = () => {
-  isVisibleModalForm.value = false;
-  
-  router.push({
-    query: undefined
-  });
+  closeModalForm();
 }
 
 const handleSubmitModalForm = (form: ModelValue) => {
-  emits('save', form);
+  console.log('=== handleSubmitModalForm ===');
+  console.log('form:', form);
+  
+  emits('save', { form, item: currentRow });
 }
 
 const handleDelete = () => {
@@ -201,6 +213,11 @@ const handleDelete = () => {
   // clearContextItem();
 }
 
+// EXTERNAL METHODS
+
+defineExpose({
+  closeModalForm
+});
 // WATCHERS
 
 watch(

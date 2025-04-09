@@ -67,6 +67,7 @@ interface IProps {
 // COMPOSABLES
 
 const { t } = useI18n();
+const route = useRoute();
 
 // MODEL
 
@@ -114,6 +115,8 @@ const isVisibleDialog = computed({
     return isVisible;
   },
   set(value) {
+    console.log('=== isVisibleDialog setter ===');
+    console.log('value:', value);
     emits('toggle', value);
   }
 });
@@ -181,11 +184,23 @@ const handleCancel = () => {
   });
 }
 
+// WATCHERS
+
+// watch(
+//   () => route.query,
+//   () => {
+//     copyInitialModelValue();
+//   },
+//   {
+//     deep: true,
+//   }
+// );
+
 // LIFECYCLE HOOKS
 
 onMounted(() => {
   copyInitialModelValue();
-})
+});
 </script>
 
 <style lang="scss">

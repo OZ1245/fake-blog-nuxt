@@ -1,5 +1,6 @@
 <template>
   <admin-editable-list
+    ref="adminEditableListComponent"
     :title="tableTitle"
     :columns="tableColumns"
     :data="users"
@@ -14,8 +15,9 @@
 <script lang="ts" setup>
 import { useUserStore } from '~/stores/user';
 import type { IUser } from '~/stores/user';
-import type { ICurrentRow, IProps as IAdminEditableListProps } from '~/components/admin/editableList.vue';
+import type { ICurrentRow, IProps as IAdminEditableListProps, IModalForm } from '~/components/admin/editableList.vue';
 import type { IField, ModelValue } from '~/components/admin/modalForm.vue';
+import type { AdminEditableList } from '#components';
 
 // TYPE DECLARE
 
@@ -27,7 +29,7 @@ interface IComputedUser extends Omit<IUser, 'company' | 'address'> {
 // COMPOSABLES
 
 const { t } = useI18n();
-const { fetchUsers, updateUser } = useUserStore();
+const { fetchUsers, patchUser, deleteUser } = useUserStore();
 
 // DATA
 
@@ -45,6 +47,7 @@ const tableColumns = <IAdminEditableListProps['columns']>[
 
 // REACTIVE DATA
 
+const adminEditableListComponent = ref<InstanceType<typeof AdminEditableList> | null>(null);
 const isLoading = ref(true);
 const users = ref<IComputedUser[]>([]);
 const fields = ref<IField[]>([
@@ -73,25 +76,27 @@ const fields = ref<IField[]>([
 
 // METHODS
 
+const processUser = (user: IUser): IComputedUser => {
+  const company = user.company.name;
+  const address = `
+    ${user.address.city},
+    ${user.address.street},
+    ${user.address.suite}
+  `;
+  
+  return <IComputedUser>{
+    ...user,
+    company,
+    address
+  };
+}
+
 const getUsers = async () => {
   isLoading.value = true;
   
   try {
     const response = await fetchUsers();
-    users.value = response.map((user) => {
-      const company = user.company.name;
-      const address = `
-        ${user.address.city},
-        ${user.address.street},
-        ${user.address.suite}
-      `;
-      
-      return <IComputedUser>{
-        ...user,
-        company,
-        address
-      };
-    });
+    users.value = response.map((user) => processUser(user));
   } catch (error) {
     Notify.create({
       type: 'error',
@@ -108,20 +113,38 @@ const init = () => {
 
 // HANDLERS
 
-const handleOpenUser = ({ item }: IContextItem) => {
+const handleOpenUser = ({ item }: ICurrentRow) => {
   console.log('=== handleOpenUser ===');
   console.log('item', item);
 }
 
-const handleDeleteUser = (data) => {
-  console.log('=== handleDeleteUser ===');
-  console.log('data', data);
+const handleSaveUser = async ({ form, item }: IModalForm) => {
+  console.log('=== handleSaveUser ===');
+  console.log('form: ', form);
+  isLoading.value = true;
+  
+  try {
+    const user = await patchUser({
+      ...form,
+      id: item.item.id,
+    });
+    console.log('user:', user);
+    users.value[item.index] = processUser(user);
+    adminEditableListComponent.value?.closeModalForm();
+  } catch (error) {
+    Notify.create({
+      type: 'error',
+      message: t('error.noSave', [error]),
+    })
+  } finally {
+    isLoading.value = false;
+  }
 }
 
-const handleSaveUser = async (form: ModelValue) => {
-  console.log('=== handleSaveUser ===');
-  console.log('form', form);
-  await updateUser(form as IUser);
+const handleDeleteUser = async ({ item }: ICurrentRow) => {
+  console.log('=== handleDeleteUser ===');
+  console.log('item', item);
+  await deleteUser(item.id);
 }
 
 // LIFECYCLE HOOKS

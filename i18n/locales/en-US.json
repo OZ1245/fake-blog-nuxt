@@ -36,7 +36,8 @@
   "error": {
     "cantFetchPosts": "Error fetching a list of posts: {0}",
     "cantFetchUsers": "Error fetch a user list: {0}",
-    "cantFetchUser": "Error fetch a user (id: {0}): {0}"
+    "cantFetchUser": "Error fetch a user (id: {0}): {0}",
+    "noSave": "The error of conservation of changes: {0}"
   },
   "common": {
     "open": "Open",

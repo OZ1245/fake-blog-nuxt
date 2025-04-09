@@ -93,7 +93,7 @@ export const useUserStore = defineStore('userStore', () => {
   }
   const updateUser = async <T>(payload: IUpdateUserPayload): Promise<T> => {
     const { id } = payload;
-    delete payload.id;
+    // delete payload.id;
     try {
       const response = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`, {
         method: 'PUT',
@@ -109,7 +109,7 @@ export const useUserStore = defineStore('userStore', () => {
   }
   const patchUser = async <T>(payload: IPatchUserPayload): Promise<T> => {
     const { id } = payload;
-    delete payload.id;
+    // delete payload.id;
     try {
       const response = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`, {
         method: 'PATCH',
