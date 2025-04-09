@@ -18,6 +18,7 @@
             <q-input
               v-model="form[field.key]"
               v-bind="field"
+              :readonly="getReadonly(field)"
             />
           </div>
         </q-card-section>
@@ -93,9 +94,13 @@ const emits = defineEmits<{
   (e: 'reset', value: ModelValue): void;
 }>();
 
+// DATA
+
+const initForm = ref<ModelValue>({});
+
 // COMPUTED
 
-const form = computed({
+const form = computed<ModelValue>({
   get() {
     return model.value;
   },
@@ -113,11 +118,30 @@ const isVisibleDialog = computed({
   }
 });
 
+const formIsChanged = computed<boolean>(() => (
+  Object.keys(initForm.value).some((key) => initForm.value[key] !== model.value[key]))
+);
+
+// METHODS
+
+const getReadonly = (field: IField): boolean => {
+  if (isReadonly) return true;
+  
+  return field.readonly || false;
+}
+
+const close = () => {
+  isVisibleDialog.value = false;
+  emits('close', false);
+}
+
+const init = () => {
+  initForm.value = { ...model.value };
+}
+
 // HANDLERS
 
-const handleSubmit = (e: Event) => {
-  emits('submit', form.value);
-}
+const handleSubmit = (e: Event) => emits('submit', form.value);
 
 const handleReset = () => {
   return; // FIXME: Подумать о правильной работе кнопки
@@ -133,14 +157,14 @@ const handleReset = () => {
   emits('reset');
 }
 
-const handleClose = () => {
-  isVisibleDialog.value = false;
-  emits('close', false);
-}
-
 const handleCancel = () => {
   if (isReadonly) {
-    isVisibleDialog.value = false;
+    close();
+    return;
+  }
+  
+  if (!formIsChanged.value) {
+    close();
     return;
   }
   
@@ -150,13 +174,19 @@ const handleCancel = () => {
     cancel: true,
   })
   .onOk(() => {
-    isVisibleDialog.value = false;
-    emits('close', false);
+    close();
   })
   .onCancel(() => {
     return;
   });
 }
+
+// LIFECYCLE HOOKS
+
+onMounted(() => {
+
+init();
+})
 </script>
 
 <style lang="scss">

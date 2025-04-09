@@ -31,7 +31,6 @@
     </template>
   </q-table>
   
-  <!--  TODO: If read only -->
   <admin-modal-form
     v-if="fields"
     v-model="form"
